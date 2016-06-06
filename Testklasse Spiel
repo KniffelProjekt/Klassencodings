@@ -1,0 +1,33 @@
+package kniffel;
+
+import java.util.Random;
+
+public class Spiel {
+
+	// Als erstes müssen die Spieler eingerichtet werden...
+	public static void main(String[] args) {
+		Punkte Roy = new Punkte("Roy");
+
+		// würfeln
+		Random zufall = new Random();
+		int[] wuerfelergebnis = new int[5];
+		{
+
+			for (int versuch = 1; versuch <= 3; versuch++) {
+				for (int i = 0; i < wuerfelergebnis.length; i++) {
+					int x = zufall.nextInt(5) + 1;
+					wuerfelergebnis[i] = x;
+					System.out.print(wuerfelergebnis[i] + "\t");
+				}
+				System.out.println(" ");
+				System.out.println(Roy.getPreview(wuerfelergebnis));
+				System.out.println(" ");
+
+			}
+
+			System.out.println("");
+			new Ranking("Roy");
+
+		}
+	}
+}
