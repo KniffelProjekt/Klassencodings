@@ -1,0 +1,246 @@
+package zweitesSemester.Projekt;
+
+import java.awt.AWTException;
+import java.awt.BorderLayout;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Robot;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import java.awt.Color;
+import java.awt.Toolkit;
+
+import javax.swing.JLabel;
+
+import java.awt.Font;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import javax.swing.border.EtchedBorder;
+
+public class SwingGUI extends JFrame {
+
+	private JPanel contentPane;
+	private static JPanel MainPanelStartScreen;
+	private static JPanel MainPanelCloseScreen;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					final SwingGUI frame = new SwingGUI();
+					frame.addWindowListener(new WindowAdapter() {
+
+						public void windowClosing(WindowEvent e) {
+							MainPanelStartScreen.setVisible(false);
+							MainPanelCloseScreen.setVisible(true);
+						}
+					});
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	private ActionListener RegelListener = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getActionCommand().equalsIgnoreCase("Kniffel Regeln")) {
+				URI uri = null;
+				try {
+					uri = new URI(
+							"https://www.schmidtspiele.de/media/files/Kniffel49203D.pdf");
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				open(uri);
+			}
+		}
+	};
+
+	private ActionListener CloseListener = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getActionCommand().equalsIgnoreCase("Ja")) {
+				System.exit(0);
+			}else if (e.getActionCommand().equalsIgnoreCase("Nein")) {
+				MainPanelCloseScreen.setVisible(false);
+				MainPanelStartScreen.setVisible(true);
+			}
+		}
+	};
+
+	/**
+	 * Create the frame.
+	 * 
+	 * @throws AWTException
+	 */
+	public SwingGUI() throws AWTException {
+
+		// Screen initialisieren und Startscreen setzen
+
+		int weite = 1200;
+		int höhe = 800;
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		int anfangWeite = (dim.width - weite) / 2;
+		int anfangHöhe = (dim.height - höhe) / 2;
+		setResizable(false);
+		setTitle("Kniffel Reloaded");
+		setIconImage(Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						"C:\\Users\\D064905\\Desktop\\DHBW Skripte\\2. Semester\\Programmieren 2\\Projekt\\w\u00FCrfel6icon.png"));
+		setForeground(Color.WHITE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setBounds(anfangWeite, anfangHöhe, weite, höhe);
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		MainPanelStartScreen = new JPanel();
+		MainPanelStartScreen.setBackground(Color.WHITE);
+		MainPanelStartScreen.setBounds(10, 11, 1174, 749);
+		contentPane.add(MainPanelStartScreen);
+		MainPanelStartScreen.setLayout(null);
+
+		JLabel ueberschrift = new JLabel("Willkommen bei");
+		ueberschrift.setBounds(337, 0, 500, 60);
+		MainPanelStartScreen.add(ueberschrift);
+		ueberschrift.setHorizontalAlignment(SwingConstants.CENTER);
+		ueberschrift.setFont(new Font("Times New Roman", Font.BOLD, 45));
+
+		JLabel KniffelLogo = new JLabel("");
+		KniffelLogo.setBounds(174, 60, 827, 242);
+		MainPanelStartScreen.add(KniffelLogo);
+		KniffelLogo
+				.setIcon(new ImageIcon(
+						"C:\\Users\\D064905\\Desktop\\DHBW Skripte\\2. Semester\\Programmieren 2\\Projekt\\Kniffel Logo.png"));
+
+		JPanel neuesSpielPanel = new JPanel();
+		neuesSpielPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
+				null));
+		neuesSpielPanel.setBackground(Color.WHITE);
+		neuesSpielPanel.setBounds(100, 400, 410, 200);
+		MainPanelStartScreen.add(neuesSpielPanel);
+		neuesSpielPanel.setLayout(null);
+
+		JButton SpielStarten = new JButton("Spiel starten");
+		SpielStarten.setBounds(180, 137, 200, 33);
+		neuesSpielPanel.add(SpielStarten);
+		SpielStarten.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+		JLabel Spieler = new JLabel("Wie viele Spieler nehmen teil?");
+		Spieler.setBounds(30, 79, 245, 44);
+		neuesSpielPanel.add(Spieler);
+		Spieler.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+		JComboBox spieleranzahl = new JComboBox();
+		spieleranzahl.setBounds(327, 85, 53, 33);
+		neuesSpielPanel.add(spieleranzahl);
+		spieleranzahl.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		spieleranzahl.setModel(new DefaultComboBoxModel(new String[] { "2",
+				"3", "4", "5", "6", "7", "8" }));
+
+		JLabel labelNeuesSpielStarten = new JLabel("Neues Spiel starten");
+		labelNeuesSpielStarten.setBounds(30, 30, 350, 36);
+		neuesSpielPanel.add(labelNeuesSpielStarten);
+		labelNeuesSpielStarten.setHorizontalAlignment(SwingConstants.CENTER);
+		labelNeuesSpielStarten.setFont(new Font("Times New Roman", Font.BOLD,
+				30));
+
+		JPanel nuetzlicheInfosPanel = new JPanel();
+		nuetzlicheInfosPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED,
+				null, null));
+		nuetzlicheInfosPanel.setBackground(Color.WHITE);
+		nuetzlicheInfosPanel.setBounds(673, 400, 410, 200);
+		MainPanelStartScreen.add(nuetzlicheInfosPanel);
+		nuetzlicheInfosPanel.setLayout(null);
+
+		JButton Anleitung = new JButton("Anleitung zum Spiel");
+		Anleitung.setBounds(161, 137, 219, 33);
+		nuetzlicheInfosPanel.add(Anleitung);
+		Anleitung.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+		JLabel labelInfos = new JLabel("N\u00FCtzliche Informationen");
+		labelInfos.setBounds(30, 30, 350, 36);
+		nuetzlicheInfosPanel.add(labelInfos);
+		labelInfos.setHorizontalAlignment(SwingConstants.CENTER);
+		labelInfos.setFont(new Font("Times New Roman", Font.BOLD, 30));
+
+		JButton KniffelRegeln = new JButton("Kniffel Regeln");
+		KniffelRegeln.setBounds(161, 93, 219, 33);
+		nuetzlicheInfosPanel.add(KniffelRegeln);
+		KniffelRegeln.addActionListener(RegelListener);
+		KniffelRegeln.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+		MainPanelCloseScreen = new JPanel();
+		MainPanelCloseScreen.setBackground(Color.WHITE);
+		MainPanelCloseScreen.setBounds(10, 11, 1174, 749);
+		contentPane.add(MainPanelCloseScreen);
+		MainPanelCloseScreen.setLayout(null);
+		MainPanelCloseScreen.setVisible(false);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(382, 303, 410, 143);
+		MainPanelCloseScreen.add(panel);
+		panel.setLayout(null);
+		panel.setBorder(null);
+		panel.setBackground(Color.WHITE);
+
+		JButton btnJa = new JButton("Ja");
+		btnJa.addActionListener(CloseListener);
+		btnJa.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		btnJa.setBounds(70, 85, 100, 33);
+		panel.add(btnJa);
+
+		JLabel lblMchtenSieDas = new JLabel(
+				"M\u00F6chten Sie das Programm wirklich beenden?");
+		lblMchtenSieDas.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMchtenSieDas.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblMchtenSieDas.setBounds(0, 30, 410, 44);
+		panel.add(lblMchtenSieDas);
+
+		JButton btnNein = new JButton("Nein");
+		btnNein.addActionListener(CloseListener);
+		btnNein.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		btnNein.setBounds(240, 85, 100, 33);
+		panel.add(btnNein);
+
+	}
+
+	private static void open(URI uri) {
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().browse(uri);
+			} catch (IOException e) { /* TODO: error handling */
+			}
+		} else { /* TODO: error handling */
+		}
+	}
+}
