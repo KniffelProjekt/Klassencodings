@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Robot;
 
+import javax.security.auth.Refreshable;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -32,11 +33,16 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import javax.swing.border.EtchedBorder;
+
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import java.awt.Component;
 
 public class SwingGUI extends JFrame {
 
-	private JPanel contentPane;
+	private static JPanel contentPane;
 	private static JPanel MainPanelStartScreen;
 	private static JPanel MainPanelCloseScreen;
 
@@ -51,8 +57,10 @@ public class SwingGUI extends JFrame {
 					frame.addWindowListener(new WindowAdapter() {
 
 						public void windowClosing(WindowEvent e) {
-							MainPanelStartScreen.setVisible(false);
-							MainPanelCloseScreen.setVisible(true);
+							contentPane.add(MainPanelCloseScreen);
+							contentPane.revalidate();
+//							MainPanelStartScreen.setVisible(false);
+//							MainPanelCloseScreen.setVisible(true);
 						}
 					});
 					frame.setVisible(true);
@@ -88,8 +96,10 @@ public class SwingGUI extends JFrame {
 			if (e.getActionCommand().equalsIgnoreCase("Ja")) {
 				System.exit(0);
 			}else if (e.getActionCommand().equalsIgnoreCase("Nein")) {
-				MainPanelCloseScreen.setVisible(false);
-				MainPanelStartScreen.setVisible(true);
+				contentPane.remove(MainPanelCloseScreen);
+				contentPane.revalidate();
+//				MainPanelCloseScreen.setVisible(false);
+//				MainPanelStartScreen.setVisible(true);
 			}
 		}
 	};
@@ -201,13 +211,12 @@ public class SwingGUI extends JFrame {
 
 		MainPanelCloseScreen = new JPanel();
 		MainPanelCloseScreen.setBackground(Color.WHITE);
-		MainPanelCloseScreen.setBounds(10, 11, 1174, 749);
+		MainPanelCloseScreen.setBounds(377, 298, 420, 153);
 		contentPane.add(MainPanelCloseScreen);
 		MainPanelCloseScreen.setLayout(null);
-		MainPanelCloseScreen.setVisible(false);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(382, 303, 410, 143);
+		panel.setBounds(5, 5, 410, 143);
 		MainPanelCloseScreen.add(panel);
 		panel.setLayout(null);
 		panel.setBorder(null);
@@ -231,6 +240,7 @@ public class SwingGUI extends JFrame {
 		btnNein.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		btnNein.setBounds(240, 85, 100, 33);
 		panel.add(btnNein);
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{MainPanelCloseScreen, panel, btnJa, lblMchtenSieDas, btnNein, MainPanelStartScreen, ueberschrift, KniffelLogo, neuesSpielPanel, SpielStarten, Spieler, spieleranzahl, labelNeuesSpielStarten, nuetzlicheInfosPanel, Anleitung, labelInfos, KniffelRegeln}));
 
 	}
 
