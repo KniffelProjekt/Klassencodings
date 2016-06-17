@@ -39,12 +39,36 @@ import javax.swing.border.EtchedBorder;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import java.awt.Component;
+import javax.swing.JTextField;
 
 public class SwingGUI extends JFrame {
 
 	private static JPanel contentPane;
 	private static JPanel MainPanelStartScreen;
 	private static JPanel MainPanelCloseScreen;
+	private static JPanel MainPanelPlayersScreen;
+	private static boolean StartScreenIsVisible = true;
+	// private boolean CloseScreenIsVisible = false;
+	private static boolean PlayerScreenIsVisible = false;
+	private JTextField Sp1Name;
+	private JTextField Sp2Name;
+	private JTextField Sp3Name;
+	private JTextField Sp4Name;
+	private JTextField Sp5Name;
+	private JTextField Sp6Name;
+	private JTextField Sp7Name;
+	private JTextField Sp8Name;
+	private JLabel Spieler1Label;
+	private JLabel Spieler2Label;
+	private JLabel Spieler3Label;
+	private JLabel Spieler4Label;
+	private JLabel Spieler5Label;
+	private JLabel Spieler6Label;
+	private JLabel Spieler7Label;
+	private JLabel Spieler8Label;
+	private JPanel ClosePanel;
+	private JPanel PlayerNamePanel;
+	private JComboBox spieleranzahl;
 
 	/**
 	 * Launch the application.
@@ -57,10 +81,13 @@ public class SwingGUI extends JFrame {
 					frame.addWindowListener(new WindowAdapter() {
 
 						public void windowClosing(WindowEvent e) {
-							contentPane.add(MainPanelCloseScreen);
-							contentPane.revalidate();
-//							MainPanelStartScreen.setVisible(false);
-//							MainPanelCloseScreen.setVisible(true);
+							if (StartScreenIsVisible) {
+								MainPanelStartScreen.setVisible(false);
+							}
+							if (PlayerScreenIsVisible) {
+								MainPanelPlayersScreen.setVisible(false);
+							}
+							MainPanelCloseScreen.setVisible(true);
 						}
 					});
 					frame.setVisible(true);
@@ -71,7 +98,7 @@ public class SwingGUI extends JFrame {
 		});
 	}
 
-	private ActionListener RegelListener = new ActionListener() {
+	private ActionListener StartScreenListener = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -85,6 +112,34 @@ public class SwingGUI extends JFrame {
 					e1.printStackTrace();
 				}
 				open(uri);
+			} else if (e.getActionCommand().equalsIgnoreCase("Spiel starten")) {
+				String spieleranz = (String) spieleranzahl.getSelectedItem();
+				switch (spieleranz) {
+				case "2":
+					Sp3Name.setVisible(false);
+					Spieler3Label.setVisible(false);
+				case "3":
+					Sp4Name.setVisible(false);
+					Spieler4Label.setVisible(false);
+				case "4":
+					Sp5Name.setVisible(false);
+					Spieler5Label.setVisible(false);
+				case "5":
+					Sp6Name.setVisible(false);
+					Spieler6Label.setVisible(false);
+				case "6":
+					Sp7Name.setVisible(false);
+					Spieler7Label.setVisible(false);
+				case "7":
+					Sp8Name.setVisible(false);
+					Spieler8Label.setVisible(false);
+				default:
+					break;
+				}
+				MainPanelPlayersScreen.setVisible(true);
+				PlayerScreenIsVisible = true;
+				MainPanelStartScreen.setVisible(false);
+				StartScreenIsVisible = false;
 			}
 		}
 	};
@@ -95,11 +150,28 @@ public class SwingGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equalsIgnoreCase("Ja")) {
 				System.exit(0);
-			}else if (e.getActionCommand().equalsIgnoreCase("Nein")) {
-				contentPane.remove(MainPanelCloseScreen);
-				contentPane.revalidate();
-//				MainPanelCloseScreen.setVisible(false);
-//				MainPanelStartScreen.setVisible(true);
+			} else if (e.getActionCommand().equalsIgnoreCase("Nein")) {
+				if (PlayerScreenIsVisible) {
+					MainPanelPlayersScreen.setVisible(true);
+				}else if (StartScreenIsVisible) {
+					MainPanelStartScreen.setVisible(true);
+				}
+				MainPanelCloseScreen.setVisible(false);
+			}
+		}
+	};
+	
+	private ActionListener PlayerScreenListener = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getActionCommand().equalsIgnoreCase("Weiter")) {
+				
+			}else if (e.getActionCommand().equalsIgnoreCase("Zurück")) {
+				MainPanelStartScreen.setVisible(true);
+				StartScreenIsVisible = true;
+				MainPanelPlayersScreen.setVisible(false);
+				PlayerScreenIsVisible = false;
 			}
 		}
 	};
@@ -149,8 +221,7 @@ public class SwingGUI extends JFrame {
 		KniffelLogo.setBounds(174, 60, 827, 242);
 		MainPanelStartScreen.add(KniffelLogo);
 		KniffelLogo
-				.setIcon(new ImageIcon(
-						"C:\\Users\\D064905\\Desktop\\DHBW Skripte\\2. Semester\\Programmieren 2\\Projekt\\Kniffel Logo.png"));
+				.setIcon(new ImageIcon(SwingGUI.class.getResource("/zweitesSemester/Projekt/Kniffel Logo.png")));
 
 		JPanel neuesSpielPanel = new JPanel();
 		neuesSpielPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
@@ -164,13 +235,14 @@ public class SwingGUI extends JFrame {
 		SpielStarten.setBounds(180, 137, 200, 33);
 		neuesSpielPanel.add(SpielStarten);
 		SpielStarten.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		SpielStarten.addActionListener(StartScreenListener);
 
 		JLabel Spieler = new JLabel("Wie viele Spieler nehmen teil?");
 		Spieler.setBounds(30, 79, 245, 44);
 		neuesSpielPanel.add(Spieler);
 		Spieler.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 
-		JComboBox spieleranzahl = new JComboBox();
+		spieleranzahl = new JComboBox();
 		spieleranzahl.setBounds(327, 85, 53, 33);
 		neuesSpielPanel.add(spieleranzahl);
 		spieleranzahl.setFont(new Font("Times New Roman", Font.PLAIN, 20));
@@ -206,41 +278,177 @@ public class SwingGUI extends JFrame {
 		JButton KniffelRegeln = new JButton("Kniffel Regeln");
 		KniffelRegeln.setBounds(161, 93, 219, 33);
 		nuetzlicheInfosPanel.add(KniffelRegeln);
-		KniffelRegeln.addActionListener(RegelListener);
+		KniffelRegeln.addActionListener(StartScreenListener);
 		KniffelRegeln.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+		MainPanelPlayersScreen = new JPanel();
+		MainPanelPlayersScreen.setLayout(null);
+		MainPanelPlayersScreen.setBackground(Color.WHITE);
+		MainPanelPlayersScreen.setBounds(0, 0, 1174, 749);
+		contentPane.add(MainPanelPlayersScreen);
+		MainPanelPlayersScreen.setVisible(false);
+
+		JPanel panel;
+		PlayerNamePanel = new JPanel();
+		PlayerNamePanel.setBounds(326, 155, 526, 390);
+		MainPanelPlayersScreen.add(PlayerNamePanel);
+		PlayerNamePanel.setLayout(null);
+
+		Spieler1Label = new JLabel("Spieler 1");
+		Spieler1Label.setBounds(93, 89, 82, 24);
+		PlayerNamePanel.add(Spieler1Label);
+		Spieler1Label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Spieler1Label.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JLabel lblBitteGebenSie = new JLabel(
+				"Bitte geben Sie die Namen der Spieler ein.");
+		lblBitteGebenSie.setBounds(45, 11, 443, 31);
+		PlayerNamePanel.add(lblBitteGebenSie);
+		lblBitteGebenSie.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBitteGebenSie.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+
+		Spieler2Label = new JLabel("Spieler 2");
+		Spieler2Label.setHorizontalAlignment(SwingConstants.CENTER);
+		Spieler2Label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Spieler2Label.setBounds(93, 124, 82, 24);
+		PlayerNamePanel.add(Spieler2Label);
+
+		Spieler3Label = new JLabel("Spieler 3");
+		Spieler3Label.setHorizontalAlignment(SwingConstants.CENTER);
+		Spieler3Label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Spieler3Label.setBounds(93, 159, 82, 24);
+		PlayerNamePanel.add(Spieler3Label);
+
+		Spieler4Label = new JLabel("Spieler 4");
+		Spieler4Label.setHorizontalAlignment(SwingConstants.CENTER);
+		Spieler4Label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Spieler4Label.setBounds(93, 194, 82, 24);
+		PlayerNamePanel.add(Spieler4Label);
+
+		Spieler5Label = new JLabel("Spieler 5");
+		Spieler5Label.setHorizontalAlignment(SwingConstants.CENTER);
+		Spieler5Label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Spieler5Label.setBounds(93, 229, 82, 24);
+		PlayerNamePanel.add(Spieler5Label);
+
+		Spieler6Label = new JLabel("Spieler 6");
+		Spieler6Label.setHorizontalAlignment(SwingConstants.CENTER);
+		Spieler6Label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Spieler6Label.setBounds(93, 264, 82, 24);
+		PlayerNamePanel.add(Spieler6Label);
+
+		Spieler7Label = new JLabel("Spieler 7");
+		Spieler7Label.setHorizontalAlignment(SwingConstants.CENTER);
+		Spieler7Label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Spieler7Label.setBounds(93, 299, 82, 24);
+		PlayerNamePanel.add(Spieler7Label);
+
+		Spieler8Label = new JLabel("Spieler 8");
+		Spieler8Label.setHorizontalAlignment(SwingConstants.CENTER);
+		Spieler8Label.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Spieler8Label.setBounds(93, 334, 82, 24);
+		PlayerNamePanel.add(Spieler8Label);
+
+		Sp1Name = new JTextField();
+		Sp1Name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Sp1Name.setBounds(256, 89, 158, 24);
+		PlayerNamePanel.add(Sp1Name);
+		Sp1Name.setColumns(10);
+
+		Sp2Name = new JTextField();
+		Sp2Name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Sp2Name.setColumns(10);
+		Sp2Name.setBounds(256, 124, 158, 24);
+		PlayerNamePanel.add(Sp2Name);
+
+		Sp3Name = new JTextField();
+		Sp3Name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Sp3Name.setColumns(10);
+		Sp3Name.setBounds(256, 159, 158, 24);
+		PlayerNamePanel.add(Sp3Name);
+
+		Sp4Name = new JTextField();
+		Sp4Name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Sp4Name.setColumns(10);
+		Sp4Name.setBounds(256, 194, 158, 24);
+		PlayerNamePanel.add(Sp4Name);
+
+		Sp5Name = new JTextField();
+		Sp5Name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Sp5Name.setColumns(10);
+		Sp5Name.setBounds(256, 229, 158, 24);
+		PlayerNamePanel.add(Sp5Name);
+
+		Sp6Name = new JTextField();
+		Sp6Name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Sp6Name.setColumns(10);
+		Sp6Name.setBounds(256, 264, 158, 24);
+		PlayerNamePanel.add(Sp6Name);
+
+		Sp7Name = new JTextField();
+		Sp7Name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Sp7Name.setColumns(10);
+		Sp7Name.setBounds(256, 299, 158, 24);
+		PlayerNamePanel.add(Sp7Name);
+
+		Sp8Name = new JTextField();
+		Sp8Name.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Sp8Name.setColumns(10);
+		Sp8Name.setBounds(256, 334, 158, 24);
+		PlayerNamePanel.add(Sp8Name);
+		
+		JButton Weiter = new JButton("Weiter");
+		Weiter.setBounds(652, 577, 200, 33);
+		MainPanelPlayersScreen.add(Weiter);
+		Weiter.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Weiter.addActionListener(PlayerScreenListener);
+		
+		JButton Zurück = new JButton("Zurück");
+		Zurück.setBounds(326, 577, 200, 33);
+		MainPanelPlayersScreen.add(Zurück);
+		Zurück.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		Zurück.addActionListener(PlayerScreenListener);
 
 		MainPanelCloseScreen = new JPanel();
 		MainPanelCloseScreen.setBackground(Color.WHITE);
 		MainPanelCloseScreen.setBounds(377, 298, 420, 153);
 		contentPane.add(MainPanelCloseScreen);
 		MainPanelCloseScreen.setLayout(null);
+		MainPanelCloseScreen.setVisible(false);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(5, 5, 410, 143);
-		MainPanelCloseScreen.add(panel);
-		panel.setLayout(null);
-		panel.setBorder(null);
-		panel.setBackground(Color.WHITE);
+		JPanel panel_1;
+		ClosePanel = new JPanel();
+		ClosePanel.setBounds(5, 5, 410, 143);
+		MainPanelCloseScreen.add(ClosePanel);
+		ClosePanel.setLayout(null);
+		ClosePanel.setBorder(null);
+		ClosePanel.setBackground(Color.WHITE);
 
 		JButton btnJa = new JButton("Ja");
 		btnJa.addActionListener(CloseListener);
 		btnJa.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		btnJa.setBounds(70, 85, 100, 33);
-		panel.add(btnJa);
+		ClosePanel.add(btnJa);
 
 		JLabel lblMchtenSieDas = new JLabel(
 				"M\u00F6chten Sie das Programm wirklich beenden?");
 		lblMchtenSieDas.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMchtenSieDas.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		lblMchtenSieDas.setBounds(0, 30, 410, 44);
-		panel.add(lblMchtenSieDas);
+		ClosePanel.add(lblMchtenSieDas);
 
 		JButton btnNein = new JButton("Nein");
 		btnNein.addActionListener(CloseListener);
 		btnNein.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		btnNein.setBounds(240, 85, 100, 33);
-		panel.add(btnNein);
-		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{MainPanelCloseScreen, panel, btnJa, lblMchtenSieDas, btnNein, MainPanelStartScreen, ueberschrift, KniffelLogo, neuesSpielPanel, SpielStarten, Spieler, spieleranzahl, labelNeuesSpielStarten, nuetzlicheInfosPanel, Anleitung, labelInfos, KniffelRegeln}));
+		ClosePanel.add(btnNein);
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(
+				new Component[] { MainPanelCloseScreen, ClosePanel, btnJa,
+						lblMchtenSieDas, btnNein, MainPanelStartScreen,
+						ueberschrift, KniffelLogo, neuesSpielPanel,
+						SpielStarten, Spieler, spieleranzahl,
+						labelNeuesSpielStarten, nuetzlicheInfosPanel,
+						Anleitung, labelInfos, KniffelRegeln }));
 
 	}
 
